@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sCOOL - Онлайн навчання</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        background-image: url("./img/background-2.png");
+        background-size: 100% 70%; /* Изображение полностью масштабируется под размеры контейнера */
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+
+      .main-container {
+        width: 100%;
+        max-width: 1200px;
+        padding: 40px;
+        border-radius: 15px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        margin: 0 auto 50px auto;
+        z-index: 1;
+      }
+
+      .title {
+        margin-top: 0;
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        color: #2c86d0;
+      }
+
+      .content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .card {
+        flex: 1 1 300px;
+        max-width: 300px;
+        text-align: center;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 15px;
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .card-image {
+        width: 100%;
+        max-width: 250px;
+        height: auto;
+        margin-bottom: 15px;
+        border-radius: 10px;
+      }
+
+      .card-title {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #2c86d0;
+        margin-top: 10px;
+      }
+
+      .cont {
+        width: 100%;
+        height: auto;
+        margin-top: 25px;
+        padding-top: 15px;
+      }
+
+      .contacts {
+        padding: 0 20px;
+        text-align: center;
+      }
+
+      .contacts h2 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        color: #333333;
+      }
+
+      .contacts p {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        color: #555555;
+      }
+
+      .span-div {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .contact-form-container {
+        background-color: white;
+        border-radius: 15px;
+        width: 45%;
+        max-width: 500px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .contacts-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding-top: 10px;
+      }
+
+      .contacts-form label {
+        text-align: left;
+        padding-left: 10px;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #007bff;
+      }
+
+      .contacts-form input,
+      .contacts-form select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+        width: 95%;
+      }
+      .contacts-form select {
+        width: 100%;
+      }
+      .contacts-form button {
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        font-size: 1rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .contacts-form button {
+        margin-top: 40px;
+      }
+      .contacts-form button:hover {
+        background-color: #0056b3;
+      }
+
+      .contacts-container {
+        background-color: white;
+        border-radius: 15px;
+        width: 45%;
+        max-width: 500px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        text-align: left;
+      }
+
+      .contact-item h3 {
+        font-size: 1.2rem;
+        color: #007bff;
+        margin-bottom: 5px;
+      }
+
+      .contact-item p {
+        font-size: 1rem;
+        color: #333333;
+      }
+
+      .social-links {
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      .social-links h3 {
+        font-size: 1.2rem;
+        color: #007bff;
+        margin-bottom: 10px;
+      }
+
+      .social-link {
+        font-size: 1rem;
+        color: #555555;
+        margin: 0 10px;
+        text-decoration: none;
+      }
+
+      .social-link:hover {
+        color: #007bff;
+      }
+    </style>
+  </head>
+  <body>
+    <app-header></app-header>
+
+    <main
+      style="
+        background-image: url('./img/background-1.jpg');
+        height: 500px;
+        background-size: cover; /* Или use 'contain' */
+        background-position: center;
+        background-repeat: no-repeat;
+      "
+    >
+      <section class="intro">
+        <h1>Ласкаво просимо на платформу sCOOL</h1>
+        <p>Знайдіть найкращі курси та репетиторів для саморозвитку!</p>
+        <button onclick="goToCourses()">Переглянути курси</button>
+      </section>
+    </main>
+    <div class="cont">
+      <div class="main-container">
+        <h1 class="title">Платформа для навчання</h1>
+        <div class="content">
+          <div class="card">
+            <img
+              src="./img/main-card-1.jpg"
+              alt="Репетиторство"
+              class="card-image"
+            />
+            <p class="card-title">Репетиторство</p>
+          </div>
+          <div class="card">
+            <img src="./img/main-card-2.jpg" alt="Курси" class="card-image" />
+            <p class="card-title">Курси</p>
+          </div>
+          <div class="card">
+            <img
+              src="./img/main-card-3.jpg"
+              alt="Бібліотека"
+              class="card-image"
+            />
+            <p class="card-title">Бібліотека</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="contacts" id="contacts">
+      <h2>Контакти</h2>
+      <p>Зв'яжіться з нами для будь-яких запитань або консультацій.</p>
+      <div class="span-div">
+        <div class="contact-form-container">
+          <form class="contacts-form" action="submit-form.php" method="POST">
+            <label for="name">Ім'я:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Введіть ваше ім'я"
+              required
+            />
+
+            <label for="phone">Номер телефону:</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              placeholder="+380XXXXXXXXX"
+              pattern="\+380\d{9}"
+              required
+            />
+
+            <label for="email">Електронна пошта:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="example@email.com"
+              required
+            />
+
+            <label for="contact-method">Переваги зв'язку:</label>
+            <select id="contact-method" name="contact-method" required>
+              <option value="" disabled selected>Оберіть спосіб зв'язку</option>
+              <option value="call">Зателефонувати</option>
+              <option value="sms">СМС</option>
+              <option value="email">Лист на пошту</option>
+            </select>
+
+            <button type="submit">Надіслати</button>
+          </form>
+        </div>
+
+        <div class="contacts-container">
+          <div class="contact-info">
+            <div class="contact-item">
+              <h3>Телефон</h3>
+              <p>+380 44 123 45 67</p>
+            </div>
+            <div class="contact-item">
+              <h3>Електронна пошта</h3>
+              <p>support@scool.com</p>
+            </div>
+            <div class="contact-item">
+              <h3>Адреса</h3>
+              <p>вул. Центральна, 10, Київ, Україна</p>
+            </div>
+          </div>
+          <div class="social-links">
+            <h3>Ми в соціальних мережах:</h3>
+            <a href="#" class="social-link">Facebook</a>
+            <a href="#" class="social-link">Instagram</a>
+            <a href="#" class="social-link">Twitter</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <app-footer></app-footer>
+    <script src="script.js"></script>
+  </body>
+</html>

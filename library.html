@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Онлайн бібліотека</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f0f8ff;
+      }
+
+      .header {
+        background-color: #007bff;
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .nav a {
+        color: white;
+        text-decoration: none;
+        margin: 0 15px;
+      }
+
+      .main-container {
+        display: flex;
+        margin: 20px;
+      }
+
+      .filters {
+        width: 300px;
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        margin-right: 20px;
+        border: 1px solid #ddd;
+      }
+
+      .filters h3 {
+        margin-bottom: 10px;
+      }
+
+      .preview-button,
+      .download-link {
+        margin: 5px;
+        padding: 10px 15px;
+        text-decoration: none;
+        border: none;
+        background: #007bff;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .download-link {
+        display: inline-block;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 800px;
+        position: relative;
+      }
+
+      .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+
+      iframe {
+        width: 100%;
+        height: 500px;
+      }
+
+      .search-bar {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .search-bar input {
+        padding: 10px;
+        font-size: 16px;
+        flex: 1;
+      }
+
+      .filters {
+        width: 300px;
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        margin-right: 20px;
+      }
+
+      .filters label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      .filters input,
+      .filters select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+
+      .books-container {
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+
+      .books-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* Всегда 4 колонки */
+        gap: 40px; /* Отступы между карточками */
+
+        margin: 0 auto; /* Центрирование */
+        box-sizing: border-box;
+      }
+
+      .book-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        flex: 1 1 auto;
+        box-sizing: border-box;
+      }
+
+      .book-cover img {
+        max-width: 100%;
+        height: 500px;
+        display: block;
+        border-radius: 8px;
+        margin: 0 auto;
+      }
+
+      .book-info {
+        margin-top: 10px;
+      }
+
+      /* Адаптивность для мобильных устройств */
+      @media (max-width: 768px) {
+        .books-grid {
+          grid-template-columns: repeat(
+            2,
+            1fr
+          ); /* 2 книги в строке на планшетах */
+        }
+      }
+
+      @media (max-width: 480px) {
+        .books-grid {
+          grid-template-columns: 1fr; /* 1 книга в строке на телефонах */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <app-header></app-header>
+    <main class="main-container">
+      <aside class="filters">
+        <h3>Фільтри</h3>
+        <div class="filter">
+          <label for="genre-filter">Жанр:</label>
+          <select id="genre-filter">
+            <option value="all">Всі жанри</option>
+            <option value="Фантастика">Фантастика</option>
+            <option value="Детектив">Детектив</option>
+            <option value="Наукова література">Наукова література</option>
+            <option value="Роман">Роман</option>
+          </select>
+        </div>
+        <div class="filter">
+          <label for="pages-filter">Кількість сторінок (до):</label>
+          <input type="number" id="pages-filter" placeholder="Наприклад, 300" />
+        </div>
+        <div class="filter">
+          <label for="year-filter">Рік видання (від):</label>
+          <input type="number" id="year-filter" placeholder="Наприклад, 2000" />
+        </div>
+        <button id="apply-filters">Застосувати фільтри</button>
+      </aside>
+
+      <section class="books-container">
+        <div class="search-bar">
+          <label for="search-title">Пошук за назвою:</label>
+          <input
+            type="text"
+            id="search-title"
+            placeholder="Введіть назву книги"
+          />
+        </div>
+
+        <section class="books-grid" id="books-grid">
+          <div
+            class="book-card"
+            data-genre="Наукова література"
+            data-pages="350"
+            data-year="2010"
+            data-title="Розробка С++ Qt"
+          >
+            <div class="book-cover">
+              <img src="./img/books/book1.jpg" alt="Обкладинка книги" />
+            </div>
+            <div class="book-info">
+              <h3>Розробка С++ Qt</h3>
+              <p>Автор: Nibedit Dey</p>
+              <p>Жанр: Наукова література</p>
+              <p>Сторінок: 350</p>
+              <p>Рік видання: 2010</p>
+              <button class="preview-button" data-pdf="./pdf/book1.pdf">
+                Переглянути PDF
+              </button>
+              <a href="./pdf/book1.pdf" download class="download-link"
+                >Завантажити</a
+              >
+            </div>
+          </div>
+          <div
+            class="book-card"
+            data-genre="Наукова література"
+            data-pages="280"
+            data-year="2019"
+            data-title="Шерлок Холмс"
+          >
+            <div class="book-cover">
+              <img src="./img/books/book2.jpg" alt="Обкладинка книги" />
+            </div>
+            <div class="book-info">
+              <h3>Математика 6 клас</h3>
+              <p>Автор: Юлія Нінова</p>
+              <p>Жанр: Наукова література</p>
+              <p>Сторінок: 280</p>
+              <p>Рік видання: 2019</p>
+              <button class="preview-button" data-pdf="./pdfs/book2.pdf">
+                Переглянути PDF
+              </button>
+              <a href="./pdfs/book2.pdf" download class="download-link"
+                >Завантажити</a
+              >
+            </div>
+          </div>
+          <div
+            class="book-card"
+            data-genre="Наукова література"
+            data-pages="400"
+            data-year="2017"
+            data-title="English Grammar"
+          >
+            <div class="book-cover">
+              <img src="./img/books/book3.jpg" alt="Обкладинка книги" />
+            </div>
+            <div class="book-info">
+              <h3>English Grammar</h3>
+              <p>Автор: Raymond Murphy</p>
+              <p>Жанр: Наукова література</p>
+              <p>Сторінок: 400</p>
+              <p>Рік видання: 2017</p>
+              <button class="preview-button" data-pdf="./pdfs/book3.pdf">
+                Переглянути PDF
+              </button>
+              <a href="./pdfs/book3.pdf" download class="download-link"
+                >Завантажити</a
+              >
+            </div>
+          </div>
+          <div
+            class="book-card"
+            data-genre="Роман"
+            data-pages="512"
+            data-year="2024"
+            data-title="Дрібним шрифтом"
+          >
+            <div class="book-cover">
+              <img
+                style="width: 80%"
+                src="./img/books/book4.jpeg"
+                alt="Обкладинка книги"
+              />
+            </div>
+            <div class="book-info">
+              <h3>Дрібним шрифтом</h3>
+              <p>Автор: Лорен Ашер</p>
+              <p>Жанр: Роман</p>
+              <p>Сторінок: 512</p>
+              <p>Рік видання: 2024</p>
+              <button class="preview-button" data-pdf="./pdf/book4.pdf">
+                Переглянути PDF
+              </button>
+              <a href="./pdf/book4.pdf" download class="download-link"
+                >Завантажити</a
+              >
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <div id="pdf-preview-modal" class="modal">
+        <div class="modal-content">
+          <button id="close-modal" class="close-button">Х</button><br />
+          <iframe id="pdf-viewer" src="" frameborder="0"></iframe>
+        </div>
+      </div>
+    </main>
+    <app-footer></app-footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const booksGrid = document.getElementById("books-grid");
+        const modal = document.getElementById("pdf-preview-modal");
+        const pdfViewer = document.getElementById("pdf-viewer");
+        const closeModal = document.getElementById("close-modal");
+
+        booksGrid.addEventListener("click", (e) => {
+          if (e.target.classList.contains("preview-button")) {
+            const pdfUrl = e.target.getAttribute("data-pdf");
+            pdfViewer.src = pdfUrl;
+            modal.style.display = "flex";
+          }
+        });
+
+        closeModal.addEventListener("click", () => {
+          modal.style.display = "none";
+          pdfViewer.src = "";
+        });
+
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) {
+            modal.style.display = "none";
+            pdfViewer.src = "";
+          }
+        });
+
+        const applyFiltersButton = document.getElementById("apply-filters");
+        applyFiltersButton.addEventListener("click", () => {
+          const genreFilter = document.getElementById("genre-filter").value;
+          const pagesFilter = parseInt(
+            document.getElementById("pages-filter").value,
+            10
+          );
+          const yearFilter = parseInt(
+            document.getElementById("year-filter").value,
+            10
+          );
+
+          const bookCards = booksGrid.querySelectorAll(".book-card");
+
+          bookCards.forEach((card) => {
+            const genre = card.getAttribute("data-genre");
+            const pages = parseInt(card.getAttribute("data-pages"), 10);
+            const year = parseInt(card.getAttribute("data-year"), 10);
+
+            let matches = true;
+
+            if (genreFilter !== "all" && genre !== genreFilter) {
+              matches = false;
+            }
+
+            if (!isNaN(pagesFilter) && pages > pagesFilter) {
+              matches = false;
+            }
+
+            if (!isNaN(yearFilter) && year < yearFilter) {
+              matches = false;
+            }
+
+            card.style.display = matches ? "block" : "none";
+          });
+        });
+      });
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>

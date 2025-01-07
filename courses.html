@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sCOOL - Курси та Репетиторство</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;        
+        background-color: #f0f8ff;
+      }
+  
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+  
+
+  
+      .header {
+        background-color: #007bff;
+        padding: 20px;
+        text-align: center;
+        color: white;
+      }
+  
+      .nav a {
+        margin: 0 10px;
+        color: white;
+        text-decoration: none;
+      }
+  
+      .main-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+      }
+  
+      .filters {
+        width: 700px;
+        background-color: #f9f9f9;
+        padding: 20px;
+        margin-right: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+  
+      .filters h3, .filters h4 {
+        margin-bottom: 10px;
+      }
+  
+      .filter {
+        margin-bottom: 20px;
+        
+     
+      }
+      .filter label{
+        width: 100%;
+        display: block;
+      }
+  
+      #apply-filters {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+  
+      #apply-filters:hover {
+        background-color: #0056b3;
+      }
+  
+      .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-right:100px;
+        
+ 
+      }
+  
+      .course-card {
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+         overflow: hidden; 
+    position: relative; 
+        padding: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out;
+        cursor: pointer; 
+        font-weight: bold;
+      color: black; 
+        p{
+          color: black;
+          font-size: 20px;
+          text-shadow: 
+        -0.5px -0.5px 0 white,
+         0.5px -0.5px 0 white,
+        -0.5px  0.5px 0 white,
+         0.5px  0.5px 0 white;
+
+        }
+
+      }
+ 
+      .course-card:hover {
+        transform: scale(1.05);
+      }
+  
+      .image-placeholder {
+        background-color: #e0e0e0;
+        height: 150px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+      }
+  
+      .price {
+        display: block;
+        font-size: 30px;
+        font-weight: bold;
+        color: #007bff;
+        margin-top: 10px;
+      }
+      .overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.feedback-form {
+  background: #fff;
+  padding: 30px 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.feedback-form h3 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.feedback-form label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.feedback-form input,
+.feedback-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.feedback-form input:focus,
+.feedback-form textarea:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.feedback-form .contact-method {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.feedback-form .contact-method label {
+  font-weight: normal;
+  font-size: 14px;
+}
+
+.feedback-form button {
+  width: calc(50% - 10px);
+  padding: 10px 15px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.feedback-form button[type="submit"] {
+  background: #007bff;
+  color: white;
+}
+
+.feedback-form button[type="submit"]:hover {
+  background: #0056b3;
+}
+
+.feedback-form button#close-form {
+  background: #ccc;
+  color: #333;
+}
+
+.feedback-form button#close-form:hover {
+  background: #999;
+}
+
+.contact-field {
+  display: none;
+}
+
+.contact-field.active {
+  display: block;
+}
+
+    </style>
+  </head>
+  <body>
+    <app-header></app-header>
+
+    <main class="main-container">
+     
+      <aside class="filters">
+        <h3>Фільтри курсів</h3>
+        <div class="filter">
+          <label for="price-range">Ціна (грн):</label>
+          <input type="range" id="price-range" min="500" max="5000" step="100" value="5000">
+          <span id="price-value">5000</span>
+        </div>
+        <div class="filter">
+          <h4>Категорії:</h4>
+          <label><input type="checkbox" class="category-filter" value="Програмування"> Програмування</label>
+          <label><input type="checkbox" class="category-filter" value="Математика"> Математика</label>
+          <label><input type="checkbox" class="category-filter" value="Іноземні мови"> Іноземні мови</label>
+          <label><input type="checkbox" class="category-filter" value="Дизайн"> Дизайн</label>
+        </div>
+        <button id="apply-filters">Застосувати фільтри</button>
+      </aside>
+     
+      <section class="courses-grid" id="courses-grid">
+        <div class="course-card" data-category="Програмування" data-price="1200" class="add-to-favorites">
+          <div class="image-placeholder"><img src="./img/courses/programming.webp" alt=""></div>
+          <h2>Курс Програмування</h2>
+          <p>Опануйте основи програмування всього за 30 днів!</p>
+          <span class="price">1200 грн</span>
+        </div>
+        <div class="course-card" data-category="Математика" data-price="1500">
+          <div class="image-placeholder"><img src="./img/courses/math.jpeg" alt=""></div>
+          <h2>Курс Математика</h2>
+          <p>Підготовка до ЗНО з математики.</p>
+          <span class="price">1500 грн</span>
+        </div>
+        <div class="course-card" data-category="Іноземні мови" data-price="1700">
+          <div class="image-placeholder"><img src="./img/courses/engl.webp" alt=""></div>
+          <h2>Курс Іноземні мови</h2>
+          <p>Вивчайте англійську легко!</p>
+          <span class="price">1700 грн</span>
+        </div>
+        <div class="course-card" data-category="Дизайн" data-price="2500">
+          <div class="image-placeholder"><img src="./img/courses/design.png" alt=""></div>
+          <h2>Курс Дизайн</h2>
+          <p>Опануйте основи графічного дизайну!</p>
+          <span class="price">2500 грн</span>
+        </div>
+        <div class="course-card" data-category="Програмування" data-price="1200">
+          <div class="image-placeholder" style="background-color: white;"><img src="./img/courses/programming2.png" alt="" style="margin-left: -500px; margin-top: -10px;"></div >
+          <h2>Курс Програмування</h2>
+          <p>Опануйте основи програмування всього за 30 днів!</p>
+          <span class="price">1200 грн</span>
+        </div>
+        <div class="course-card" data-category="Математика" data-price="1500">
+          <div class="image-placeholder"><img src="./img/courses/math2.png" alt="" style="margin-left: -50px; margin-top: -200px;"></div>
+          <h2>Курс Математика</h2>
+          <p>Підготовка до ЗНО з математики.</p>
+          <span class="price">1500 грн</span>
+        </div>
+        <div class="course-card" data-category="Іноземні мови" data-price="1700">
+          <div class="image-placeholder"><img src="./img/courses/engl2.webp" alt="" style="margin-left: -50px; margin-top: -10px;"></div>
+          <h2>Курс Іноземні мови</h2>
+          <p>Вивчайте англійську легко!</p>
+          <span class="price">1700 грн</span>
+        </div>
+        <div class="course-card" data-category="Дизайн" data-price="2500">
+          <div class="image-placeholder"  style="background-color: white;"><img src="./img/courses/design2.webp" alt=""></div>
+          <h2>Курс Дизайн</h2>
+          <p>Опануйте основи графічного дизайну!</p>
+          <span class="price">2500 грн</span>
+        </div>
+        <div class="course-card" data-category="Дизайн" data-price="2500">
+          <div class="image-placeholder"><img src="./img/courses/design3.jpeg" alt=""> style="margin-left: -50px; margin-top: -10px;"></div>
+          <h2>Курс Дизайн</h2>
+          <p>Опануйте основи графічного дизайну!</p>
+          <span class="price">2500 грн</span>
+        </div>
+      </section>
+      
+    </div>
+    <div class="overlay" id="overlay" style="display: none;">
+      <div class="feedback-form">
+        <h3>Записатися на курс</h3>
+        <form id="contact-form">
+          <label for="tutor-name">Курс:</label>
+          <input type="text" id="tutor-name" name="tutor-name" readonly />
+    
+          <label for="user-name">Ваше ім'я:</label>
+          <input type="text" id="user-name" name="user-name" placeholder="Ваше ім'я" required />
+    
+          <label>Спосіб зв'язку:</label>
+          <div class="contact-method">
+            <label>
+              <input type="radio" name="contact-method" value="email" checked /> Email
+            </label>
+            <label>
+              <input type="radio" name="contact-method" value="phone" /> Телефон
+            </label>
+          </div>
+    
+          <div id="email-input" class="contact-field">
+            <label for="user-email">Ваш email:</label>
+            <input type="email" id="user-email" name="user-email" placeholder="Ваш email" required />
+          </div>
+    
+          <div id="phone-input" class="contact-field" style="display: none;">
+            <label for="user-phone">Ваш телефон:</label>
+            <input type="tel" id="user-phone" name="user-phone" placeholder="Ваш телефон" pattern="[0-9+]{10,15}" />
+          </div>
+    
+          <label for="user-message">Ваше повідомлення:</label>
+          <textarea id="user-message" name="user-message" rows="4" placeholder="Ваше повідомлення" required></textarea>
+    
+          <button type="submit" class="add-to-favorites">Відправити</button>
+          <button type="button" id="close-form">Закрити</button>
+        </form>
+      </div>
+    </div>
+    
+    </main>
+  <app-footer></app-footer>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+  const priceRange = document.getElementById("price-range");
+  const priceValue = document.getElementById("price-value");
+  const categoryFilters = document.querySelectorAll(".category-filter");
+  const coursesGrid = document.getElementById("courses-grid");
+  const applyFiltersButton = document.getElementById("apply-filters");
+  priceRange.addEventListener("input", () => {
+    priceValue.textContent = priceRange.value;
+  });
+
+
+  applyFiltersButton.addEventListener("click", () => {
+    const maxPrice = parseInt(priceRange.value, 10);
+    const selectedCategories = Array.from(categoryFilters)
+      .filter((checkbox) => checkbox.checked)
+      .map((checkbox) => checkbox.value);
+
+    const courses = coursesGrid.querySelectorAll(".course-card");
+
+    courses.forEach((course) => {
+      const coursePrice = parseInt(course.dataset.price, 10);
+      const courseCategory = course.dataset.category;
+
+      if (
+        coursePrice <= maxPrice &&
+        (selectedCategories.length === 0 || selectedCategories.includes(courseCategory))
+      ) {
+        course.style.display = "block";
+      } else {
+        course.style.display = "none";
+      }
+    });
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const overlay = document.getElementById("overlay");
+  const closeFormButton = document.getElementById("close-form");
+  const contactForm = document.getElementById("contact-form");
+  const tutorNameInput = document.getElementById("tutor-name");
+
+  const emailInput = document.getElementById("email-input");
+  const phoneInput = document.getElementById("phone-input");
+  const contactMethodRadios = document.querySelectorAll("input[name='contact-method']");
+
+  const tutorCards = document.querySelectorAll(".course-card");
+  tutorCards.forEach((card) => {
+    card.addEventListener("click", () => {
+      const tutorName = card.querySelector(".course-card h2").textContent;
+      tutorNameInput.value = tutorName;
+      overlay.style.display = "flex";
+    });
+  });
+
+
+  contactMethodRadios.forEach((radio) => {
+    radio.addEventListener("change", () => {
+      if (radio.value === "email") {
+        emailInput.style.display = "block";
+        phoneInput.style.display = "none";
+        document.getElementById("user-email").required = true;
+        document.getElementById("user-phone").required = false;
+      } else {
+        emailInput.style.display = "none";
+        phoneInput.style.display = "block";
+        document.getElementById("user-email").required = false;
+        document.getElementById("user-phone").required = true;
+      }
+    });
+  });
+
+
+  closeFormButton.addEventListener("click", () => {
+    overlay.style.display = "none";
+  });
+
+
+  contactForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    alert("Ваше повідомлення було надіслано!");
+    overlay.style.display = "none";
+    contactForm.reset();
+  });
+});
+
+  </script>
+    <script src="script.js"></script>
+  </body>
+</html>

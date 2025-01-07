@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sCOOL - Курси та Репетиторство</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+  
+      body {
+
+        line-height: 1.6;
+        background-color: #f0f8ff;
+        color: #333;
+      }
+
+      .main-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+      }
+  
+      .filters {
+        width: 450px;
+        background-color: #f9f9f9;
+        padding: 20px;
+        margin-right: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+  
+      .filters h3, .filters h4 {
+        margin-bottom: 10px;
+      }
+  
+      .filter {
+        margin-bottom: 20px;
+        
+     
+      }
+      .filter label{
+        width: 100%;
+        display: block;
+      }
+  
+      #apply-filters {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+  
+      #apply-filters:hover {
+        background-color: #0056b3;
+      }
+
+.tutors-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 20px;
+  max-width: 1200px; 
+  margin-right: 700px;
+}
+
+.tutor-card {
+  display: flex;
+  align-items: center; 
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out;
+  padding: 15px;
+  height: 250px;
+  width: 400px;
+}
+
+.tutor-card:hover {
+  transform: scale(1.05);
+}
+
+.tutor-photo img {
+  width: 100px; 
+  height: 100px;
+  border-radius: 50%; 
+  object-fit: cover;
+  margin-right: 15px; 
+}
+
+.tutor-info {
+  flex: 1; 
+}
+
+.tutor-info h3 {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+}
+
+.tutor-info p {
+  margin: 5px 0;
+  color: #555;
+}
+
+@media (max-width: 768px) {
+  .tutors-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .tutors-grid {
+    grid-template-columns: 1fr; 
+  }
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.feedback-form {
+  background: #fff;
+  padding: 30px 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.feedback-form h3 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.feedback-form label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.feedback-form input,
+.feedback-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.feedback-form input:focus,
+.feedback-form textarea:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.feedback-form .contact-method {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.feedback-form .contact-method label {
+  font-weight: normal;
+  font-size: 14px;
+}
+
+.feedback-form button {
+  width: calc(50% - 10px);
+  padding: 10px 15px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.feedback-form button[type="submit"] {
+  background: #007bff;
+  color: white;
+}
+
+.feedback-form button[type="submit"]:hover {
+  background: #0056b3;
+}
+
+.feedback-form button#close-form {
+  background: #ccc;
+  color: #333;
+}
+
+.feedback-form button#close-form:hover {
+  background: #999;
+}
+
+.contact-field {
+  display: none;
+}
+
+.contact-field.active {
+  display: block;
+}
+
+
+    </style>
+  </head>
+  <body>
+    <app-header></app-header>
+  
+    <main class="main-container">
+
+      <div class="filters">
+        <h3>Фільтрувати репетиторів</h3>
+  
+        <div class="filter">
+          <label for="price-range">Ціна за годину:</label>
+          <input type="range" id="price-range" min="100" max="1000" step="50" value="1000" />
+          <span id="price-value">1000 грн/год</span>
+        </div>
+  
+        <div class="filter">
+          <h4>Предмети:</h4>
+          <label><input type="checkbox" class="subject-filter" value="Математика" /> Математика</label><br />
+          <label><input type="checkbox" class="subject-filter" value="Англійська мова" /> Англійська мова</label><br />
+          <label><input type="checkbox" class="subject-filter" value="Дизайн" /> Дизайн</label><br />
+          <label><input type="checkbox" class="subject-filter" value="Інформатика" /> Інформатика</label><br />
+          <label><input type="checkbox" class="subject-filter" value="Німецька мова" /> Німецька мова</label><br />
+          <label><input type="checkbox" class="subject-filter" value="Французька мова" /> Французька мова</label><br />
+        </div>
+  
+        <div class="filter">
+          <label for="name-filter">Ім'я репетитора:</label>
+          <input type="text" id="name-filter" placeholder="Наприклад, Іван" />
+        </div>
+  
+        <button id="apply-filters">Застосувати фільтри</button>
+      </div>
+  
+      <div class="tutors-grid">
+        <div class="tutor-card" data-subject="Математика" data-name="Іван Іваненко" data-price="300">
+          <div class="tutor-photo">
+            <img src="./img/rep/rep_men.png" alt="Фото репетитора">
+          </div>
+          <div class="tutor-info">
+            <h3>Іван Іваненко</h3>
+            <p>Предмет: Математика</p>
+            <p>Ціна: 300 грн/год</p>
+            <p>Досвід: 5 років</p>
+          </div>
+        </div>
+        
+        <div class="tutor-card" data-subject="Програмування" data-name="Петро Петрович" data-price="500">
+          <div class="tutor-photo">
+            <img src="./img/rep/rep_men.png" alt="Фото репетитора">
+          </div>
+          <div class="tutor-info">
+            <h3>Петро Петрович</h3>
+            <p>Предмет: Програмування</p>
+            <p>Ціна: 500 грн/год</p>
+            <p>Досвід: 7 років</p>
+          </div>
+        </div>
+        
+        <div class="tutor-card" data-subject="Англійська мова" data-name="Оксана Коваленко" data-price="400">
+          <div class="tutor-photo">
+            <img src="./img/rep/rep_women.png" alt="Фото репетитора">
+          </div>
+          <div class="tutor-info">
+            <h3>Оксана Коваленко</h3>
+            <p>Предмет: Англійська мова</p>
+            <p>Ціна: 400 грн/год</p>
+            <p>Досвід: 3 роки</p>
+          </div>
+        </div>
+        
+        <div class="tutor-card" data-subject="Фізика" data-name="Дмитро Андрухович" data-price="350">
+          <div class="tutor-photo">
+            <img src="./img/rep/rep_men.png" alt="Фото репетитора">
+          </div>
+          <div class="tutor-info">
+            <h3>Дмитро Андрухович</h3>
+            <p>Предмет: Фізика</p>
+            <p>Ціна: 350 грн/год</p>
+            <p>Досвід: 4 роки</p>
+          </div>
+        </div>
+        
+        <div class="tutor-card" data-subject="Біологія" data-name="Марія Іванова" data-price="250">
+          <div class="tutor-photo">
+            <img src="./img/rep/rep_women.png" alt="Фото репетитора">
+          </div>
+          <div class="tutor-info">
+            <h3>Марія Іванова</h3>
+            <p>Предмет: Біологія</p>
+            <p>Ціна: 250 грн/год</p>
+            <p>Досвід: 2 роки</p>
+          </div>
+        </div>
+        
+        <div class="tutor-card" data-subject="Історія України" data-name="Олександр Гончаренко" data-price="200">
+          <div class="tutor-photo">
+            <img src="./img/rep/rep_men.png" alt="Фото репетитора">
+          </div>
+          <div class="tutor-info">
+            <h3>Олександр Гончаренко</h3>
+            <p>Предмет: Історія України</p>
+            <p>Ціна: 200 грн/год</p>
+            <p>Досвід: 6 років</p>
+          </div>
+        </div>
+        
+        <div class="tutor-card" data-subject="Географія" data-name="Віталій Степанюк" data-price="220">
+          <div class="tutor-photo">
+            <img src="./img/rep/rep_men.png" alt="Фото репетитора">
+          </div>
+          <div class="tutor-info">
+            <h3>Віталій Степанюк</h3>
+            <p>Предмет: Географія</p>
+            <p>Ціна: 220 грн/год</p>
+            <p>Досвід: 4 роки</p>
+          </div>
+        </div>
+        
+        <div class="tutor-card" data-subject="Українська мова та література" data-name="Світлана Ткаченко" data-price="300">
+          <div class="tutor-photo">
+            <img src="./img/rep/rep_women.png" alt="Фото репетитора">
+          </div>
+          <div class="tutor-info">
+            <h3>Світлана Ткаченко</h3>
+            <p>Предмет: Українська мова та література</p>
+            <p>Ціна: 300 грн/год</p>
+            <p>Досвід: 5 років</p>
+          </div>
+        </div>
+        
+        <div class="tutor-card" data-subject="Хімія" data-name="Ганна Шевченко" data-price="350">
+          <div class="tutor-photo">
+            <img src="./img/rep/rep_women.png" alt="Фото репетитора">
+          </div>
+          <div class="tutor-info">
+            <h3>Ганна Шевченко</h3>
+            <p>Предмет: Хімія</p>
+            <p>Ціна: 350 грн/год</p>
+            <p>Досвід: 3 роки</p>
+          </div>
+        </div>
+        
+        <div class="tutor-card" data-subject="Інформатика" data-name="Михайло Василенко" data-price="400">
+          <div class="tutor-photo">
+            <img src="./img/rep/rep_men.png" alt="Фото репетитора">
+          </div>
+          <div class="tutor-info">
+            <h3>Михайло Василенко</h3>
+            <p>Предмет: Інформатика</p>
+            <p>Ціна: 400 грн/год</p>
+            <p>Досвід: 6 років</p>
+          </div>
+        </div>
+        
+        <div class="tutor-card" data-subject="Німецька мова" data-name="Катерина Зінченко" data-price="450">
+          <div class="tutor-photo">
+            <img src="./img/rep/rep_women.png" alt="Фото репетитора">
+          </div>
+          <div class="tutor-info">
+            <h3>Катерина Зінченко</h3>
+            <p>Предмет: Німецька мова</p>
+            <p>Ціна: 450 грн/год</p>
+            <p>Досвід: 8 років</p>
+          </div>
+        </div>
+        
+        <div class="tutor-card" data-subject="Французька мова" data-name="Аліна Кравчук" data-price="500">
+          <div class="tutor-photo">
+            <img src="./img/rep/rep_women.png" alt="Фото репетитора">
+          </div>
+          <div class="tutor-info">
+            <h3>Аліна Кравчук</h3>
+            <p>Предмет: Французька мова</p>
+            <p>Ціна: 500 грн/год</p>
+            <p>Досвід: 4 роки</p>
+          </div>
+        </div>
+        
+      </div>
+      
+  
+      </div>
+      <div class="overlay" id="overlay" style="display: none;">
+        <div class="feedback-form">
+          <h3>Зв'язатися з репетитором</h3>
+          <form id="contact-form">
+            <label for="tutor-name">Репетитор:</label>
+            <input type="text" id="tutor-name" name="tutor-name" readonly />
+      
+            <label for="user-name">Ваше ім'я:</label>
+            <input type="text" id="user-name" name="user-name" placeholder="Ваше ім'я" required />
+      
+            <label>Спосіб зв'язку:</label>
+            <div class="contact-method">
+              <label>
+                <input type="radio" name="contact-method" value="email" checked /> Email
+              </label>
+              <label>
+                <input type="radio" name="contact-method" value="phone" /> Телефон
+              </label>
+            </div>
+      
+            <div id="email-input" class="contact-field">
+              <label for="user-email">Ваш email:</label>
+              <input type="email" id="user-email" name="user-email" placeholder="Ваш email" required />
+            </div>
+      
+            <div id="phone-input" class="contact-field" style="display: none;">
+              <label for="user-phone">Ваш телефон:</label>
+              <input type="tel" id="user-phone" name="user-phone" placeholder="Ваш телефон" pattern="[0-9+]{10,15}" />
+            </div>
+      
+            <label for="user-message">Ваше повідомлення:</label>
+            <textarea id="user-message" name="user-message" rows="4" placeholder="Ваше повідомлення" required></textarea>
+      
+            <button type="submit">Відправити</button>
+            <button type="button" id="close-form">Закрити</button>
+          </form>
+        </div>
+      </div>
+      
+      
+    </main>
+    <app-footer></app-footer>
+  
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const subjectFilters = document.querySelectorAll(".subject-filter");
+        const nameFilter = document.getElementById("name-filter");
+        const priceRange = document.getElementById("price-range");
+        const priceValue = document.getElementById("price-value");
+        const tutorsGrid = document.querySelector(".tutors-grid");
+        const applyFiltersButton = document.getElementById("apply-filters");
+  
+
+        priceRange.addEventListener("input", () => {
+          priceValue.textContent = `${priceRange.value} грн/год`;
+        });
+  
+        applyFiltersButton.addEventListener("click", () => {
+          const selectedSubjects = Array.from(subjectFilters)
+            .filter((checkbox) => checkbox.checked)
+            .map((checkbox) => checkbox.value);
+          const nameSearch = nameFilter.value.trim().toLowerCase();
+          const maxPrice = parseInt(priceRange.value);
+  
+          const tutorCards = tutorsGrid.querySelectorAll(".tutor-card");
+  
+          tutorCards.forEach((card) => {
+            const tutorSubject = card.dataset.subject;
+            const tutorName = card.dataset.name.toLowerCase();
+            const tutorPrice = parseInt(card.dataset.price);
+  
+            const matchesName = nameSearch === "" || tutorName.includes(nameSearch);
+            const matchesSubject =
+              selectedSubjects.length === 0 || selectedSubjects.includes(tutorSubject);
+            const matchesPrice = tutorPrice <= maxPrice;
+  
+            if (matchesName && matchesSubject && matchesPrice) {
+              card.style.display = "block";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        });
+      });
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const overlay = document.getElementById("overlay");
+  const closeFormButton = document.getElementById("close-form");
+  const contactForm = document.getElementById("contact-form");
+  const tutorNameInput = document.getElementById("tutor-name");
+
+  const emailInput = document.getElementById("email-input");
+  const phoneInput = document.getElementById("phone-input");
+  const contactMethodRadios = document.querySelectorAll("input[name='contact-method']");
+
+
+  const tutorCards = document.querySelectorAll(".tutor-card");
+  tutorCards.forEach((card) => {
+    card.addEventListener("click", () => {
+      const tutorName = card.querySelector(".tutor-info h3").textContent;
+      tutorNameInput.value = tutorName;
+      overlay.style.display = "flex";
+    });
+  });
+
+
+  contactMethodRadios.forEach((radio) => {
+    radio.addEventListener("change", () => {
+      if (radio.value === "email") {
+        emailInput.style.display = "block";
+        phoneInput.style.display = "none";
+        document.getElementById("user-email").required = true;
+        document.getElementById("user-phone").required = false;
+      } else {
+        emailInput.style.display = "none";
+        phoneInput.style.display = "block";
+        document.getElementById("user-email").required = false;
+        document.getElementById("user-phone").required = true;
+      }
+    });
+  });
+
+
+  closeFormButton.addEventListener("click", () => {
+    overlay.style.display = "none";
+  });
+
+
+  contactForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    alert("Ваше повідомлення було надіслано!");
+    overlay.style.display = "none";
+    contactForm.reset();
+  });
+});
+</script>
+
+
+    
+
+    <script src="script.js"></script>
+  </body>
+</html>
